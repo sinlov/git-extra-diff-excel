@@ -1,19 +1,17 @@
-package subcommand_new
+package subcommand_csv
 
 import (
 	"github.com/sinlov/git-extra-diff-excel/command"
-	"github.com/sinlov/git-extra-diff-excel/constant"
 	"github.com/sinlov/git-extra-diff-excel/internal/d_log"
-	"github.com/sinlov/git-extra-diff-excel/internal/urfave_cli"
 	"github.com/urfave/cli/v2"
 	"strings"
 )
 
-const commandName = "new"
+const commandName = "csv"
 
-var commandEntry *NewCommand
+var commandEntry *CsvCommand
 
-type NewCommand struct {
+type CsvCommand struct {
 	cliName  string
 	version  string
 	buildId  string
@@ -24,11 +22,11 @@ type NewCommand struct {
 	isDebug      bool
 	execFullPath string
 	runRootPath  string
-	// TODO: remove it if not use
-	PlatformConfig *constant.PlatformConfig
+
+	isIgnoreRead bool
 }
 
-func (n *NewCommand) Exec() error {
+func (n *CsvCommand) Exec() error {
 	d_log.Debugf("-> Exec cli [ %s ] by subCommand [ %s ], version %s buildID %s", n.cliName, commandName, n.version, n.buildId)
 	if n.isDebug {
 		d_log.Verbosef("cli full path: %s", n.execFullPath)
@@ -45,26 +43,21 @@ func (n *NewCommand) Exec() error {
 func flag() []cli.Flag {
 	return []cli.Flag{
 		&cli.BoolFlag{
-			Name:  "lib",
-			Usage: "Use a library template",
+			Name:  "ignore-read",
+			Usage: "ignore read excel file error",
 			Value: false,
-		},
-		&cli.StringFlag{
-			Name:    "name",
-			Aliases: []string{"n"},
-			Usage:   "Set the resulting package name, defaults to the directory name",
 		},
 	}
 }
 
-func withEntry(c *cli.Context) (*NewCommand, error) {
+func withEntry(c *cli.Context) (*CsvCommand, error) {
 	d_log.Debugf("-> withEntry subCommand [ %s ]", commandName)
 
 	if c.Bool("lib") {
 		d_log.Info("new lib mode")
 	}
 	globalEntry := command.CmdGlobalEntry()
-	return &NewCommand{
+	return &CsvCommand{
 		cliName:  globalEntry.Name,
 		version:  globalEntry.Version,
 		buildId:  globalEntry.BuildId,
@@ -76,8 +69,7 @@ func withEntry(c *cli.Context) (*NewCommand, error) {
 		execFullPath: globalEntry.RootCfg.ExecFullPath,
 		runRootPath:  globalEntry.RootCfg.RunRootPath,
 
-		// todo: if not use platform config, remove this
-		PlatformConfig: constant.BindPlatformConfig(c),
+		isIgnoreRead: c.Bool("ignore-read"),
 	}, nil
 }
 
@@ -97,11 +89,7 @@ func Command() []*cli.Command {
 			Name:   commandName,
 			Usage:  "",
 			Action: action,
-
-			//Flags: flag(),
-			// todo: if not use platform config, remove this use method flag()
-			//Flags: urfave_cli.UrfaveCliAppendCliFlag(flag(), command.HideGlobalFlag()),
-			Flags: urfave_cli.UrfaveCliAppendCliFlag(flag(), constant.PlatformFlags()),
+			Flags:  flag(),
 		},
 	}
 }
