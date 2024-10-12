@@ -17,7 +17,7 @@ type ExcelFileReader struct {
 }
 
 var (
-	defaultOptionExcelFileReader = setDefaultOptionExcelFileReader(nil)
+	defaultOptionExcelFileReader = setDefaultOptionExcelFileReader([]string{})
 )
 
 func setDefaultOptionExcelFileReader(filePaths []string) *ExcelFileReader {
@@ -36,11 +36,12 @@ type ExcelFileReaderOption func(*ExcelFileReader)
 //	    With(""),
 //	)
 func NewExcelFileReader(filePaths []string, opts ...ExcelFileReaderOption) (opt *ExcelFileReader) {
-	opt = setDefaultOptionExcelFileReader(filePaths)
+	opt = defaultOptionExcelFileReader
+	opt.filePaths = filePaths
 	for _, o := range opts {
 		o(opt)
 	}
-	defaultOptionExcelFileReader = setDefaultOptionExcelFileReader(filePaths)
+	defaultOptionExcelFileReader = setDefaultOptionExcelFileReader([]string{})
 	return
 }
 

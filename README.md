@@ -9,16 +9,30 @@
 [![GitHub latest SemVer tag)](https://img.shields.io/github/v/tag/sinlov/git-extra-diff-excel)](https://github.com/sinlov/git-extra-diff-excel/tags)
 [![GitHub release)](https://img.shields.io/github/v/release/sinlov/git-extra-diff-excel)](https://github.com/sinlov/git-extra-diff-excel/releases)
 
+## Read Usage
+
+- [usage en-US](#usage)
+- [中文使用说明 zh-CN](doc/README-zh-CN.md)
+
 ## for what
 
-- this project used to cli with golang
+- git extra diff tool for Excel file
+    -  dump excel file metadata to csv file by `go-excelize`
 
 ## Features
 
+- [x] support windows macOS linux git diff
+- [x] subcommand for diff excel can ignore
+    - [x] `--ignore-read` ignore read excel file error
+    - [x] `--ignore-parse` ignore excel file to csv error
 - [ ] more perfect test case coverage
 - [ ] more perfect benchmark case
 
 ## usage
+
+- install by release binary from [release page](https://github.com/sinlov/git-extra-diff-excel/releases)
+
+- install binary by cli
 
 ```bash
 # install at ${GOPATH}/bin
@@ -27,10 +41,58 @@ $ go install -v github.com/sinlov/git-extra-diff-excel/cmd/git-extra-diff-excel@
 $ go install -v github.com/sinlov/git-extra-diff-excel/cmd/git-extra-diff-excel@v1.0.0
 ```
 
-- use this template, replace list below and add usage
-    - `github.com/sinlov/git-extra-diff-excel` to your package name
-    - `sinlov` to your owner name
-    - `git-extra-diff-excel` to your project name
+remember binary install path, if you use `go install` in `$GOPATH/bin`
+
+- add git diff excel config
+
+```bash
+# replace <git-extra-diff-excel> full path for installation
+git config --global diff."excel".textconv "<git-extra-diff-excel> csv"
+# go install can use as
+# linux or macOS
+git config --global diff."excel".textconv "$(which git-extra-diff-excel) csv"
+# windows powershell
+git config --global diff."excel".textconv "$((Get-Commond git-extra-diff-excel).Source) csv"
+
+# add binary config
+git config --global diff."excel".binary true
+```
+
+at file `~/.gitconfig` will add config like `/Users/sinlov/go/bin/git-extra-diff-excel` is install path
+
+```conf
+[diff "excel"]
+	textconv = /Users/sinlov/go/bin/git-extra-diff-excel csv
+	binary = true
+```
+
+### project excel diff config
+
+- at want to use Excel diff, project root file `.gitattributes` add config
+
+```conf
+*.xlsx  diff=excel
+*.XLSX  diff=excel
+*.xls   diff=excel
+*.XLS   diff=excel
+```
+
+- then submit `.gitattributes` to take effect
+
+- If you change the Excel file again, you can use the command to see the diff changes.
+
+```bash
+$ git diff --word-diff=color --unified=1
+─────────────────────────────────────────────────────────────┐
+• DataTables/demo/Datas/__tables__.xlsx:7: SheetName: Sheet1 │
+─────────────────────────────────────────────────────────────┘
+,placeholder.TbItem3,item3,TRUE,item_3.xlsx
+,placeholder.TbItem4,item4,TRUE,item_3.xlsx
+```
+
+or use [sourceTree](https://www.sourcetreeapp.com/) or [fork](https://git-fork.com/) will show change content
+
+![img.png](doc/img/fork-diff-excel.png)
 
 ## dev
 
