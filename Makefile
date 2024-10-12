@@ -19,7 +19,7 @@ INFO_TEST_BUILD_DOCKER_FILE =build.dockerfile
 
 ## run info start
 ENV_RUN_INFO_HELP_ARGS =-h
-ENV_RUN_INFO_ARGS      =csv args1 args2
+ENV_RUN_INFO_ARGS      =csv example/excel_file/__beans__.xlsx example/excel_file/__enums__.xlsx
 ## run info end
 
 ## go test go-test.mk start

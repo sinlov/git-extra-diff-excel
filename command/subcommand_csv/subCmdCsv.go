@@ -1,7 +1,9 @@
 package subcommand_csv
 
 import (
+	"fmt"
 	"github.com/sinlov/git-extra-diff-excel/command"
+	"github.com/sinlov/git-extra-diff-excel/excel_file_reader"
 	"github.com/sinlov/git-extra-diff-excel/internal/d_log"
 	"github.com/urfave/cli/v2"
 	"strings"
@@ -23,7 +25,8 @@ type CsvCommand struct {
 	execFullPath string
 	runRootPath  string
 
-	isIgnoreRead bool
+	isIgnoreRead     bool
+	isIgnoreCsvParse bool
 }
 
 func (n *CsvCommand) Exec() error {
@@ -37,6 +40,27 @@ func (n *CsvCommand) Exec() error {
 		}
 	}
 
+	if n.Args.Len() == 0 {
+		return fmt.Errorf("dir require, please check args")
+	}
+
+	excelFileReader := excel_file_reader.NewExcelFileReader(
+		n.Args.Slice(),
+		excel_file_reader.WithIgnoreRead(n.isIgnoreRead),
+		excel_file_reader.WithIgnoreColumnRead(n.isIgnoreRead),
+		excel_file_reader.WithIgnoreRowsRead(n.isIgnoreRead),
+		excel_file_reader.WithIgnoreCsvWrite(n.isIgnoreCsvParse),
+	)
+	errCheckFilePaths := excelFileReader.CheckFilePaths()
+	if errCheckFilePaths != nil {
+		return errCheckFilePaths
+	}
+
+	errReadExcelFilesAsStdout := excelFileReader.ReadExcelFilesAsStdout()
+	if errReadExcelFilesAsStdout != nil {
+		return errReadExcelFilesAsStdout
+	}
+
 	return nil
 }
 
@@ -45,6 +69,11 @@ func flag() []cli.Flag {
 		&cli.BoolFlag{
 			Name:  "ignore-read",
 			Usage: "ignore read excel file error",
+			Value: false,
+		},
+		&cli.BoolFlag{
+			Name:  "ignore-parse",
+			Usage: "ignore parse csv file error",
 			Value: false,
 		},
 	}
@@ -69,7 +98,8 @@ func withEntry(c *cli.Context) (*CsvCommand, error) {
 		execFullPath: globalEntry.RootCfg.ExecFullPath,
 		runRootPath:  globalEntry.RootCfg.RunRootPath,
 
-		isIgnoreRead: c.Bool("ignore-read"),
+		isIgnoreRead:     c.Bool("ignore-read"),
+		isIgnoreCsvParse: c.Bool("ignore-parse"),
 	}, nil
 }
 
