@@ -17,7 +17,7 @@
 ## for what
 
 - git extra diff tool for Excel file
-    -  dump excel file metadata to csv file by `go-excelize`
+  -  By transferring Excel file metadata to csv file through tool `go-excelize`, git diff can change content after all instead of facing binary changes.
 
 ## Features
 

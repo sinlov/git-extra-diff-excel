@@ -1,3 +1,8 @@
+## 工具目的
+
+- 用于Excel文件的 git diff 扩展工具
+    -  通过将 excel 文件元数据 通过工具 `go-excelize` 转到 csv 文件，让 git diff 可以毕竟内容变化，而不是面对 二进制改动
+
 ## 特性
 
 - [x] 支持 Windows macOS linux git diff
