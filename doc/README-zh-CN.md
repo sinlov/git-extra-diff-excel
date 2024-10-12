@@ -31,7 +31,7 @@ git config --global diff."excel".textconv "<git-extra-diff-excel> csv"
 # linux or macOS
 git config --global diff."excel".textconv "$(which git-extra-diff-excel) csv"
 # windows powershell
-git config --global diff."excel".textconv "$((Get-Commond git-extra-diff-excel).Source) csv"
+git config --global diff."excel".textconv "$((Get-Command git-extra-diff-excel).Source.Replace(`"\`", `"/`")) csv"
 
 # 添加 binary 配置
 git config --global diff."excel".binary true
@@ -42,6 +42,14 @@ git config --global diff."excel".binary true
 ```conf
 [diff "excel"]
 	textconv = /Users/sinlov/go/bin/git-extra-diff-excel csv
+	binary = true
+```
+
+- Windows配置为
+
+```conf
+[diff "excel"]
+	textconv = C:/Users/sinlov/go/bin/git-extra-diff-excel.exe csv
 	binary = true
 ```
 
@@ -67,8 +75,16 @@ $ git diff --word-diff=color --unified=1
 ─────────────────────────────────────────────────────────────┘
 ,placeholder.TbItem3,item3,TRUE,item_3.xlsx
 ,placeholder.TbItem4,item4,TRUE,item_3.xlsx
+
+# or
+$ git diff --word-diff=color --cached
+─────────────────────────────────────────────────────────────┐
+• DataTables/demo/Datas/__tables__.xlsx:7: SheetName: Sheet1 │
+─────────────────────────────────────────────────────────────┘
+,placeholder.TbItem3,item3,TRUE,item_3.xlsx
+,placeholder.TbItem4,item4,TRUE,item_3.xlsx
 ```
 
 或使用 [sourceTree](https://www.sourcetreeapp.com/) or [fork](https://git-fork.com/) 将显示更改内容
 
-![img.png](img/fork-diff-excel.png)
+![img.png](https://github.com/sinlov/git-extra-diff-excel/blob/main/doc/img/fork-diff-excel.png?raw=true)
