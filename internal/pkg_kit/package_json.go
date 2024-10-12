@@ -61,6 +61,7 @@ func GetPackageJsonAuthor() Author {
 }
 
 func GetPackageJsonHomepage() string {
+	checkPackageJsonLoad()
 	return pkgJson.Homepage
 }
 
@@ -96,7 +97,7 @@ func initJsonContent() {
 	if pkgJ.Author.Name == "" {
 		panic(fmt.Errorf("pkg_kit parse package.json author name is empty"))
 	}
-	//if pkgJ.Author.Email == "" {
+	//if pkgJ.AuthorName.Email == "" {
 	//	panic(fmt.Errorf("pkg_kit parse package.json author email is empty"))
 	//}
 	pkgJson = &pkgJ

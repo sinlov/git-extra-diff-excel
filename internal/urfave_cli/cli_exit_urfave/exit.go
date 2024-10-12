@@ -5,7 +5,8 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-const exitCodeDefault = 127
+// exitCodeDefault SIGUSR1 as 10
+const exitCodeDefault = 10
 
 var exitCode = exitCodeDefault
 

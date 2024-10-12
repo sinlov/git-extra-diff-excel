@@ -8,29 +8,25 @@ import (
 	"github.com/sinlov/git-extra-diff-excel/internal/urfave_cli"
 	"github.com/sinlov/git-extra-diff-excel/internal/urfave_cli/cli_exit_urfave"
 	"github.com/urfave/cli/v2"
-	"runtime"
-	"time"
 )
 
 const (
-	copyrightStartYear = "2023"
-	defaultExitCode    = 1
+	// defaultExitCode SIGINT as 2
+	defaultExitCode = 1
 )
 
-func NewCliApp(buildId string) *cli.App {
+func NewCliApp(bdInfo pkg_kit.BuildInfo) *cli.App {
 	cli_exit_urfave.ChangeDefaultExitCode(defaultExitCode)
 	app := cli.NewApp()
 	app.EnableBashCompletion = true
-	app.Version = pkg_kit.GetPackageJsonVersionGoStyle(false)
-	app.Name = pkg_kit.GetPackageJsonName()
+	app.Name = bdInfo.PgkNameString()
+	app.Version = bdInfo.VersionString()
 	if pkg_kit.GetPackageJsonHomepage() != "" {
 		app.Usage = fmt.Sprintf("see: %s", pkg_kit.GetPackageJsonHomepage())
 	}
 	app.Description = pkg_kit.GetPackageJsonDescription()
-	year := time.Now().Year()
 	jsonAuthor := pkg_kit.GetPackageJsonAuthor()
-	app.Copyright = fmt.Sprintf("© %s-%d %s by: %s, build id: %s, run on %s %s",
-		copyrightStartYear, year, jsonAuthor.Name, runtime.Version(), buildId, runtime.GOOS, runtime.GOARCH)
+	app.Copyright = bdInfo.String()
 	author := &cli.Author{
 		Name:  jsonAuthor.Name,
 		Email: jsonAuthor.Email,
