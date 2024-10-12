@@ -10,7 +10,7 @@ import (
 func GlobalFlag() []cli.Flag {
 	return []cli.Flag{
 		&cli.BoolFlag{
-			Name:    constant.NameKeyCliVerbose,
+			Name:    constant.NameCliVerbose,
 			Usage:   "open cli verbose mode",
 			Value:   false,
 			EnvVars: []string{constant.EnvKeyCliVerbose},
@@ -21,7 +21,7 @@ func GlobalFlag() []cli.Flag {
 func HideGlobalFlag() []cli.Flag {
 	return []cli.Flag{
 		&cli.UintFlag{
-			Name:    constant.NamePluginTimeOut,
+			Name:    constant.NameCliTimeoutSecond,
 			Usage:   "command timeout setting second",
 			Hidden:  true,
 			Value:   10,

@@ -1,7 +1,7 @@
 {
   "name": "git-extra-diff-excel",
   "version": "1.0.0",
-  "description": "template of golang cli tools",
+  "description": "git extra diff tool for Excel file",
   "directories": {
     "doc": "doc"
   },
@@ -11,13 +11,13 @@
   },
   "keywords": [
     "go",
-    "make",
-    "docker",
-    "action"
+    "git",
+    "diff",
+    "excel"
   ],
   "author": {
     "name": "sinlov",
-    "email": "",
+    "email": "sinlovgmppt@gmail.com",
     "url": "https://github.com/sinlov/git-extra-diff-excel"
   },
   "license": "Apache-2.0",

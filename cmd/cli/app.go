@@ -3,7 +3,7 @@ package cli
 import (
 	"fmt"
 	"github.com/sinlov/git-extra-diff-excel/command"
-	"github.com/sinlov/git-extra-diff-excel/command/subcommand_new"
+	"github.com/sinlov/git-extra-diff-excel/command/subcommand_csv"
 	"github.com/sinlov/git-extra-diff-excel/internal/pkg_kit"
 	"github.com/sinlov/git-extra-diff-excel/internal/urfave_cli"
 	"github.com/sinlov/git-extra-diff-excel/internal/urfave_cli/cli_exit_urfave"
@@ -43,7 +43,7 @@ func NewCliApp(bdInfo pkg_kit.BuildInfo) *cli.App {
 	app.After = command.GlobalAfterAction
 
 	var appCommands []*cli.Command
-	appCommands = urfave_cli.UrfaveCliAppendCliCommand(appCommands, subcommand_new.Command())
+	appCommands = urfave_cli.UrfaveCliAppendCliCommand(appCommands, subcommand_csv.Command())
 
 	app.Commands = appCommands
 
